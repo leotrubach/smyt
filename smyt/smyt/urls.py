@@ -4,6 +4,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+from dynmodels.views import HomeView, list_models, model_data
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'smyt.views.home', name='home'),
@@ -14,4 +16,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^models/$', list_models, name='get_models'),
+    url(r'^modeldata/$', model_data, name='model_data'),
 )

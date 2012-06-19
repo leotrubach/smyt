@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div class="page-header">
+                <h1>Models</h1>
+            </div>
+            <div class="well" id="model_container"></div>
+        </div>
+        <div class="span10">
+            <div class="page-header">
+                <h1>Data</h1>
+            </div>
+            <div id="data_container"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function link_click() {
+        var id = this.id;
+        $.getJSON('/modeldata/', {'id': id}, function(data){
+            var table = $('<table>').addClass('table');
+            var header = $('<thead>').appendTo(table);
+            var header_row = $('<tr>').appendTo(header);
+            var body = $('<tbody>').appendTo(table);
+            $.each(data['header'], function(){
+                $('<th>').text(this).appendTo(header_row);
+            });
+
+            $.each(data['body'], function(){
+                data_row = $('<tr>').appendTo(body);
+                $.each(this, function(){
+                    $('<th>').text(this).appendTo(data_row);
+                });
+            });
+            $('#data_container').empty().append(table);
+        });
+    }
+
+    function process_json (data){
+        var model_list = $('<ul>').addClass('nav').addClass('nav-list');
+        $.each(data, function(e){
+            var link = $('<a>')
+                    .attr({'id': this[0], 'href':'#'})
+                    .text(this[1])
+                    .click(link_click);
+            $('<li>').append(link).appendTo(model_list);
+
+        });
+        $('#model_container').append(model_list);
+    }
+
+    $(function(){
+        $.getJSON('/models/', process_json);
+    });
+</script>
+{% endblock %}
