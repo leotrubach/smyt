@@ -4,7 +4,6 @@ from django.contrib import admin
 import yaml
 from os.path import dirname, abspath, join
 
-# Create your models here.
 
 FIELD_TYPE_CLASSES = {
     'int': (models.IntegerField, {}),
