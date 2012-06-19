@@ -1,5 +1,8 @@
-# Django settings for smyt project.
+from os.path import dirname, abspath, join
 
+
+PROJECT_DIR = dirname(dirname(abspath(__file__)))
+# Django settings for smyt project.
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -48,28 +51,49 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+try:
+    from site_settings import SITE_MEDIA_ROOT
+except ImportError:
+    MEDIA_ROOT = join(PROJECT_DIR, 'stored_media')
+else:
+    MEDIA_ROOT = SITE_MEDIA_ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+try:
+    from site_settings import SITE_MEDIA_URL
+except ImportError:
+    MEDIA_URL = '/media/'
+else:
+    MEDIA_URL = SITE_MEDIA_URL
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+try:
+    from site_settings import SITE_STATIC_ROOT
+except ImportError:
+    STATIC_ROOT = join(PROJECT_DIR, 'collected_static')
+else:
+    STATIC_ROOT = SITE_STATIC_ROOT
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-
+try:
+    from site_settings import SITE_STATIC_URL
+except ImportError:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = SITE_STATIC_URL
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    join(PROJECT_DIR, 'static'),
 )
 
 # List of finder classes that know how to find static files in
